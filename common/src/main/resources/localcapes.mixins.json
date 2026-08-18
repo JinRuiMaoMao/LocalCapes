@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.localcapes.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "AbstractClientPlayerMixin",
+    "CapeLayerMixin",
+    "CreativeModeInventoryScreenMixin",
+    "ElytraLayerMixin",
+    "InventoryScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

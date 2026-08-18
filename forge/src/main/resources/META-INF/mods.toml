@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[${forge_version},)"
+license = "${mod_license}"
+issueTrackerURL = ""
+
+[[mods]]
+modId = "${mod_id}"
+version = "${version}"
+displayName = "${mod_name}"
+authors = "${mod_author}"
+description = '''${mod_description}'''
+displayTest = "IGNORE_ALL_VERSION"
+
+[[mixins]]
+config = "localcapes.mixins.json"
+
+[[dependencies.localcapes]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forge_version},)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.localcapes]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version},1.20.2)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.localcapes]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_version},)"
+ordering = "AFTER"
+side = "CLIENT"
