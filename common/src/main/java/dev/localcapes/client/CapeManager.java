@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -31,15 +32,77 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public final class CapeManager {
-    public static final List<String> CATEGORY_ORDER = List.of(
-            "account",
-            "staff",
-            "event_physical",
-            "event_virtual",
-            "personal",
-            "competition",
-            "volunteer",
-            "local"
+    /** Grid order follows the wiki write-up sequence. IDs not listed yet sort last. */
+    private static final List<String> DISPLAY_ORDER = List.of(
+            "pan",
+            "migrator",
+            "vanilla",
+            "common",
+            "mojang_classic",
+            "mojang",
+            "microsoft_xbox_360",
+            "4j_studios",
+            "mojang_studios",
+            "minecon_2011",
+            "minecon_2012",
+            "minecon_2013",
+            "minecon_2015",
+            "minecon_2016",
+            "minecraft_experience",
+            "moonlight_trail",
+            "crafter",
+            "founders",
+            "progress_pride",
+            "cherry_blossom",
+            "followers",
+            "purple_heart",
+            "15th_anniversary",
+            "mcc_15th_year",
+            "mojang_office",
+            "home",
+            "menace",
+            "yearn",
+            "copper",
+            "zombie_horse",
+            "builder",
+            "bacon",
+            "millionth_customer",
+            "dannybstyle",
+            "julianclark",
+            "cheapsh0t",
+            "mrmessiah",
+            "prismarine",
+            "turtle",
+            "birthday",
+            "valentine",
+            "oxeye",
+            "blueprint",
+            "scrolls_champion",
+            "cobalt",
+            "translator",
+            "chinese_translator",
+            "moderator",
+            "mapmaker",
+            "hero",
+            "sinister",
+            "phantom",
+            "year1",
+            "downpour",
+            "prism",
+            "cloudy_climb",
+            "iceologer",
+            "glow",
+            "luminous_night",
+            "amethyst",
+            "gift_wrap",
+            "cow_crusader",
+            "turtle_shell",
+            "fauna_faire",
+            "ominous",
+            "hammer",
+            "iron_golem",
+            "mystery",
+            "red_royal"
     );
 
     private static final Pattern UUID_DASHED = Pattern.compile(
@@ -58,6 +121,8 @@ public final class CapeManager {
     @Nullable
     private static ResourceLocation selected;
     private static boolean unequipped;
+    private static String gameFilter = CapeEntry.GAME_MINECRAFT;
+    private static boolean nightGlow = true;
 
     private CapeManager() {
     }
@@ -108,6 +173,8 @@ public final class CapeManager {
         }
 
         loadSelection();
+        loadFilter();
+        loadNightGlow();
         LocalCapes.LOGGER.info("Loaded {} bundled and {} local cape(s)", BUNDLED.size(), loaded);
         return BUNDLED.size() + loaded;
     }
@@ -121,19 +188,36 @@ public final class CapeManager {
             String path = location.getPath();
             String relative = path.substring("textures/cape/".length(), path.length() - 4);
             int slash = relative.indexOf('/');
-            if (slash <= 0) {
+            if (slash <= 0 && !relative.startsWith("dungeons/")) {
                 continue;
             }
-            String category = relative.substring(0, slash);
-            String stem = relative.substring(slash + 1);
-            BUNDLED.add(new CapeEntry(stem, category, displayName(stem), location, false));
+            String game = CapeEntry.GAME_MINECRAFT;
+            String rest = relative;
+            if (relative.startsWith("dungeons/")) {
+                game = CapeEntry.GAME_DUNGEONS;
+                rest = relative.substring("dungeons/".length());
+            }
+            int restSlash = rest.indexOf('/');
+            String category;
+            String stem;
+            if (restSlash <= 0) {
+                category = game;
+                stem = rest;
+            } else {
+                category = rest.substring(0, restSlash);
+                stem = rest.substring(restSlash + 1);
+            }
+            if (stem.isEmpty()) {
+                continue;
+            }
+            BUNDLED.add(new CapeEntry(stem, category, game, displayName(stem), location, false));
         }
         BUNDLED.sort(Comparator
                 .comparingInt((CapeEntry e) -> {
-                    int i = CATEGORY_ORDER.indexOf(e.category);
-                    return i < 0 ? 99 : i;
+                    int i = DISPLAY_ORDER.indexOf(e.id);
+                    return i < 0 ? DISPLAY_ORDER.size() : i;
                 })
-                .thenComparing(e -> e.displayName, String.CASE_INSENSITIVE_ORDER));
+                .thenComparing(e -> e.id, String.CASE_INSENSITIVE_ORDER));
     }
 
     private static boolean loadCape(TextureManager textures, Path file) {
@@ -155,7 +239,7 @@ public final class CapeManager {
             textures.register(id, new DynamicTexture(image));
             DYNAMIC.add(id);
             indexCape(stem, id);
-            LOCAL_FILES.add(new CapeEntry(stem, "local", displayName(stem), id, true));
+            LOCAL_FILES.add(new CapeEntry(stem, "local", CapeEntry.GAME_MINECRAFT, displayName(stem), id, true));
             return true;
         } catch (IOException e) {
             LocalCapes.LOGGER.error("Could not load cape {}", file, e);
@@ -213,14 +297,128 @@ public final class CapeManager {
         return all;
     }
 
-    public static List<CapeEntry> entriesIn(String category) {
+    public static List<CapeEntry> entriesForGame(String game) {
         List<CapeEntry> result = new ArrayList<>();
-        for (CapeEntry entry : entries()) {
-            if (entry.category.equals(category)) {
+        for (CapeEntry entry : BUNDLED) {
+            if (entry.game.equals(game)) {
                 result.add(entry);
             }
         }
+        if (CapeEntry.GAME_MINECRAFT.equals(game)) {
+            result.addAll(LOCAL_FILES);
+        }
         return result;
+    }
+
+    public static String getGameFilter() {
+        return gameFilter;
+    }
+
+    public static void setGameFilter(String game) {
+        if (CapeEntry.GAME_DUNGEONS.equals(game)) {
+            gameFilter = CapeEntry.GAME_DUNGEONS;
+        } else {
+            gameFilter = CapeEntry.GAME_MINECRAFT;
+        }
+        saveFilter();
+    }
+
+    public static boolean isNightGlow() {
+        return nightGlow;
+    }
+
+    public static boolean toggleNightGlow() {
+        nightGlow = !nightGlow;
+        saveNightGlow();
+        return nightGlow;
+    }
+
+    public static boolean shouldNightGlow(AbstractClientPlayer player) {
+        return nightGlow
+                && hasCape(player)
+                && player.level() != null
+                && CapeGlow.isDarkEnough(player.level(), player);
+    }
+
+    @Nullable
+    public static CapeEntry importCape(Path source) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft == null || !Files.isRegularFile(source)) {
+            return null;
+        }
+
+        Path dir = getCapeDir();
+        try {
+            Files.createDirectories(dir);
+            try (InputStream in = Files.newInputStream(source);
+                 NativeImage ignored = NativeImage.read(in)) {
+            }
+
+            String stem = stemFromFilename(source.getFileName().toString());
+            if (stem.isEmpty()) {
+                stem = "cape";
+            }
+            Path dest = uniqueLocalPath(dir, stem);
+            Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+
+            reload(minecraft.getResourceManager());
+            String id = dest.getFileName().toString();
+            id = id.substring(0, id.length() - 4);
+            for (CapeEntry entry : LOCAL_FILES) {
+                if (entry.id.equals(id)) {
+                    return entry;
+                }
+            }
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not import cape from {}", source, e);
+        }
+        return null;
+    }
+
+    public static boolean deleteLocal(CapeEntry entry) {
+        if (!entry.localFile) {
+            return false;
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft == null) {
+            return false;
+        }
+        Path file = getCapeDir().resolve(entry.id + ".png");
+        if (!Files.isRegularFile(file)) {
+            return false;
+        }
+        try {
+            if (isSelected(entry)) {
+                unequip();
+            }
+            Files.delete(file);
+            reload(minecraft.getResourceManager());
+            return true;
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not delete cape {}", file, e);
+            return false;
+        }
+    }
+
+    private static String stemFromFilename(String filename) {
+        if (!filename.toLowerCase(Locale.ROOT).endsWith(".png")) {
+            return sanitize(filename);
+        }
+        return sanitize(filename.substring(0, filename.length() - 4));
+    }
+
+    private static Path uniqueLocalPath(Path dir, String stem) throws IOException {
+        Path dest = dir.resolve(stem + ".png");
+        if (!Files.exists(dest)) {
+            return dest;
+        }
+        for (int i = 1; i < 1000; i++) {
+            dest = dir.resolve(stem + "_" + i + ".png");
+            if (!Files.exists(dest)) {
+                return dest;
+            }
+        }
+        throw new IOException("Too many capes named " + stem);
     }
 
     public static boolean hasCape(AbstractClientPlayer player) {
@@ -288,6 +486,62 @@ public final class CapeManager {
         return getCapeDir().resolve("selected.txt");
     }
 
+    private static Path filterFile() {
+        return getCapeDir().resolve("filter.txt");
+    }
+
+    private static void loadFilter() {
+        Path file = filterFile();
+        if (!Files.exists(file)) {
+            gameFilter = CapeEntry.GAME_MINECRAFT;
+            return;
+        }
+        try {
+            String line = Files.readString(file, StandardCharsets.UTF_8).trim();
+            gameFilter = CapeEntry.GAME_DUNGEONS.equalsIgnoreCase(line)
+                    ? CapeEntry.GAME_DUNGEONS
+                    : CapeEntry.GAME_MINECRAFT;
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not read cape filter", e);
+        }
+    }
+
+    private static void saveFilter() {
+        try {
+            Files.createDirectories(getCapeDir());
+            Files.writeString(filterFile(), gameFilter, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not save cape filter", e);
+        }
+    }
+
+    private static Path glowFile() {
+        return getCapeDir().resolve("glow.txt");
+    }
+
+    private static void loadNightGlow() {
+        Path file = glowFile();
+        if (!Files.exists(file)) {
+            nightGlow = true;
+            return;
+        }
+        try {
+            String line = Files.readString(file, StandardCharsets.UTF_8).trim();
+            nightGlow = !"off".equalsIgnoreCase(line) && !"false".equalsIgnoreCase(line);
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not read cape glow setting", e);
+        }
+    }
+
+    private static void saveNightGlow() {
+        try {
+            Files.createDirectories(getCapeDir());
+            Files.writeString(glowFile(), nightGlow ? "on" : "off", StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            LocalCapes.LOGGER.error("Could not save cape glow setting", e);
+        }
+    }
+
     private static void loadSelection() {
         Path file = selectionFile();
         if (!Files.exists(file)) {
@@ -334,7 +588,7 @@ public final class CapeManager {
                 LocalCapes
                 ==========
                 Open your inventory and click 披风, or press H, to pick a bundled cape.
-                Extra PNGs in this folder also appear under the Local category.
+                Extra PNGs in this folder also appear in the Minecraft list.
 
                 Naming extra files:
                   YourMinecraftName.png   - shown on that player
