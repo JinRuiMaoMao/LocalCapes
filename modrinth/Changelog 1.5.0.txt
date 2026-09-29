@@ -1,0 +1,25 @@
+## 1.5.0
+
+### New / 新增
+- **Aurora Cape** added (Minecraft Dungeons II watch-time promotion, Sep 29 – Oct 15, 2026). Bundled Java capes: 49 → 50
+  新增**极光披风**（Minecraft Dungeons II 直播观看活动，2026 年 9 月 29 日 – 10 月 15 日）。内置 Java 披风 49 → 50
+- **20 Minecraft Dungeons capes** (Hero, Sinister, Phantom, Birthday, Glow, Luminous Night, and more)
+  新增 **20 件《我的世界：地下城》披风**（英雄、险恶、幻翼、生日、荧光、辉光暗夜等）
+- **2 Minecraft Dungeons II capes**: Twisted Cape and the new Hero Cape
+  新增 **2 件《我的世界：地下城 2》披风**：扭曲披风、新版英雄披风
+- **Night glow**: capes and cape-textured elytra glow in the dark (night or dark places). Toggle at the bottom of the picker
+  **夜晚发光**：夜晚或昏暗处，披风和使用披风贴图的鞘翅会发光。可在选择界面底部开关
+
+### Changed / 改动
+- Game filter moved into a **dropdown next to the title**: Minecraft / Minecraft Dungeons / Minecraft Dungeons II
+  游戏筛选改为**标题旁的下拉菜单**：我的世界 / 我的世界地下城 / 我的世界地下城2
+- All Minecraft capes now on **one scrolling page**, grouped under category headers in Wiki order
+  所有 Minecraft 披风合并为**一个滚动页面**，按 Wiki 顺序分组并显示分类标题
+- Mouse wheel **jumps one category** at a time on the Minecraft page
+  「我的世界」页面**滚轮一次跳一个分类**
+- Shows 5 rows instead of 4; "Unequip" moved to the bottom-right
+  列表从 4 行增加到 5 行；「卸下」按钮移到右下角
+- Tooltips show cape name + description for every cape, including Dungeons capes
+  所有披风（包括地下城）悬停均显示名称和描述
+- Removed alphabetical sorting (Wiki order only)
+  移除按名称排序（仅保留 Wiki 顺序）

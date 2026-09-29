@@ -65,6 +65,7 @@ public final class CapeManager {
             "copper",
             "zombie_horse",
             "builder",
+            "aurora",
             "bacon",
             "millionth_customer",
             "dannybstyle",
@@ -102,7 +103,9 @@ public final class CapeManager {
             "hammer",
             "iron_golem",
             "mystery",
-            "red_royal"
+            "red_royal",
+            "twisted",
+            "hero_mcd2"
     );
 
     private static final Pattern UUID_DASHED = Pattern.compile(
@@ -188,14 +191,15 @@ public final class CapeManager {
             String path = location.getPath();
             String relative = path.substring("textures/cape/".length(), path.length() - 4);
             int slash = relative.indexOf('/');
-            if (slash <= 0 && !relative.startsWith("dungeons/")) {
+            if (slash <= 0) {
                 continue;
             }
             String game = CapeEntry.GAME_MINECRAFT;
             String rest = relative;
-            if (relative.startsWith("dungeons/")) {
-                game = CapeEntry.GAME_DUNGEONS;
-                rest = relative.substring("dungeons/".length());
+            String top = relative.substring(0, slash);
+            if (!CapeEntry.GAME_MINECRAFT.equals(top) && CapeEntry.GAMES.contains(top)) {
+                game = top;
+                rest = relative.substring(slash + 1);
             }
             int restSlash = rest.indexOf('/');
             String category;
@@ -315,11 +319,7 @@ public final class CapeManager {
     }
 
     public static void setGameFilter(String game) {
-        if (CapeEntry.GAME_DUNGEONS.equals(game)) {
-            gameFilter = CapeEntry.GAME_DUNGEONS;
-        } else {
-            gameFilter = CapeEntry.GAME_MINECRAFT;
-        }
+        gameFilter = CapeEntry.GAMES.contains(game) ? game : CapeEntry.GAME_MINECRAFT;
         saveFilter();
     }
 
@@ -498,9 +498,8 @@ public final class CapeManager {
         }
         try {
             String line = Files.readString(file, StandardCharsets.UTF_8).trim();
-            gameFilter = CapeEntry.GAME_DUNGEONS.equalsIgnoreCase(line)
-                    ? CapeEntry.GAME_DUNGEONS
-                    : CapeEntry.GAME_MINECRAFT;
+            String game = line.toLowerCase(Locale.ROOT);
+            gameFilter = CapeEntry.GAMES.contains(game) ? game : CapeEntry.GAME_MINECRAFT;
         } catch (IOException e) {
             LocalCapes.LOGGER.error("Could not read cape filter", e);
         }

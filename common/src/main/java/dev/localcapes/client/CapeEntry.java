@@ -2,9 +2,13 @@ package dev.localcapes.client;
 
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.List;
+
 public final class CapeEntry {
     public static final String GAME_MINECRAFT = "minecraft";
     public static final String GAME_DUNGEONS = "dungeons";
+    public static final String GAME_DUNGEONS_2 = "dungeons2";
+    public static final List<String> GAMES = List.of(GAME_MINECRAFT, GAME_DUNGEONS, GAME_DUNGEONS_2);
 
     public final String id;
     public final String category;
