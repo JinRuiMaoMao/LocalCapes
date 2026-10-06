@@ -67,7 +67,7 @@ public abstract class ElytraLayerMixin {
         if (texture == null) {
             texture = player.getCloakTextureLocation();
         }
-        if (texture == null) {
+        if (texture == null || texture.equals(CapeManager.VANILLA_ELYTRA)) {
             return;
         }
         VertexConsumer consumer = buffer.getBuffer(CapeGlow.overlay(texture));

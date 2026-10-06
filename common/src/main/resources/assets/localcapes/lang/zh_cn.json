@@ -179,5 +179,15 @@
   "cape.localcapes.dungeons2.twisted.name": "扭曲披风",
   "cape.localcapes.dungeons2.twisted.desc": "在 2026 年 9 月 28 日前预购 Minecraft Dungeons II 并登录游戏即可获得。部分内容创作者提前获得了这件披风。\n\n披风图案是扭曲监守者的脊柱；鞘翅肩部带有监守者骨头，向下延伸为幽匿纹理，末端是一对钩状弯曲，形似监守者的头部和触角。\n\n退款 Dungeons II 会收回这件披风，且之后重新购买也无法再次获得。",
   "cape.localcapes.dungeons2.hero_mcd2.name": "英雄披风",
-  "cape.localcapes.dungeons2.hero_mcd2.desc": "在 2026 年 12 月 31 日前先后登录 Minecraft Dungeons 和 Minecraft Dungeons II 即可自动获得，无需在地下城中拥有原版英雄披风。部分内容创作者提前获得了这件披风。\n\n红色布面上是金色的红石巨怪面孔，底边镶有金边；鞘翅版本使用同样配色的金色刺绣图案。\n\n退款 Dungeons II 会收回这件披风。"
+  "cape.localcapes.dungeons2.hero_mcd2.desc": "在 2026 年 12 月 31 日前先后登录 Minecraft Dungeons 和 Minecraft Dungeons II 即可自动获得，无需在地下城中拥有原版英雄披风。部分内容创作者提前获得了这件披风。\n\n红色布面上是金色的红石巨怪面孔，底边镶有金边；鞘翅版本使用同样配色的金色刺绣图案。\n\n退款 Dungeons II 会收回这件披风。",
+  "cape.localcapes.dungeons2.soul.name": "灵魂披风",
+  "cape.localcapes.dungeons2.soul.desc": "购买 Minecraft Dungeons II 豪华版即可获得。\n\n深蓝色背景上升起一个发光的小幽灵（或灵魂）。地下城2没有鞘翅，装备鞘翅时显示原版鞘翅材质。",
+  "cape.localcapes.dungeons2.corrupted_creeper.name": "腐化苦力怕披风",
+  "cape.localcapes.dungeons2.corrupted_creeper.desc": "最初在 2026 年科隆游戏展上以实体兑换卡发放；东京电玩展后通过 Discord 问卷在线赠送；2026 年 9 月 21 日至 26 日期间，在 Twitch 观看任意直播 15 分钟或在 TikTok 观看 3 分钟也可获得兑换码。兑换码需在地下城2内兑换，截止日期为 2027 年 12 月 31 日。\n\n深蓝色背景上是一张眼睛发出淡蓝色光芒的苦力怕脸。地下城2没有鞘翅，装备鞘翅时显示原版鞘翅材质。",
+  "cape.localcapes.dungeons2.special.name": "特别披风",
+  "cape.localcapes.dungeons2.special.desc": "亲友披风，发放给 Mojang 员工、合作伙伴、Xbox 测试人员和内容创作者。\n\n橙色顶部带有深色花纹，中央为深色，底部是蓝色几何边框。地下城2没有鞘翅，装备鞘翅时显示原版鞘翅材质。",
+  "cape.localcapes.dungeons2.mojang_mcd2.name": "Mojang 披风",
+  "cape.localcapes.dungeons2.mojang_mcd2.desc": "发放给 Mojang Studios 员工。\n\n红色布面上印有白色的 Mojang 标志，与 Java 版的 Mojang 披风类似。地下城2没有鞘翅，装备鞘翅时显示原版鞘翅材质。",
+  "cape.localcapes.dungeons2.slice_slayer.name": "切片杀手披风",
+  "cape.localcapes.dungeons2.slice_slayer.desc": "目前未使用，存在于地下城2的游戏文件中。\n\n外侧是一块流淌着芝士的披萨，内侧为饼皮般的棕色。地下城2没有鞘翅，装备鞘翅时显示原版鞘翅材质。"
 }

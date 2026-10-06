@@ -22,7 +22,14 @@ public abstract class AbstractClientPlayerMixin {
     private void localcapes$elytra(CallbackInfoReturnable<ResourceLocation> cir) {
         ResourceLocation cape = CapeManager.getCape((AbstractClientPlayer) (Object) this);
         if (cape != null) {
-            cir.setReturnValue(cape);
+            cir.setReturnValue(CapeManager.elytraTexture(cape));
+        }
+    }
+
+    @Inject(method = "isElytraLoaded", at = @At("HEAD"), cancellable = true)
+    private void localcapes$elytraLoaded(CallbackInfoReturnable<Boolean> cir) {
+        if (CapeManager.hasCape((AbstractClientPlayer) (Object) this)) {
+            cir.setReturnValue(true);
         }
     }
 
