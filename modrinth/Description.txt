@@ -1,8 +1,8 @@
 # LocalCapes
 
-**LocalCapes** is a client-side mod for Minecraft 1.20.1 (Fabric & Forge) that lets you wear bundled capes or your own PNG capes in-game. Capes are only visible on your own client.
+**LocalCapes** is a client-side mod for Minecraft 1.20.1 (Fabric & Forge) and 1.21.1 (Fabric & NeoForge) that lets you wear bundled capes or your own PNG capes in-game. Capes are only visible on your own client.
 
-**LocalCapes** 是一个适用于 Minecraft 1.20.1（Fabric & Forge）的纯客户端 Mod，可在游戏内佩戴内置披风或自己的 PNG 披风。披风仅在你自己的客户端可见。
+**LocalCapes** 是一个适用于 Minecraft 1.20.1（Fabric & Forge）和 1.21.1（Fabric & NeoForge）的纯客户端 Mod，可在游戏内佩戴内置披风或自己的 PNG 披风。披风仅在你自己的客户端可见。
 
 ---
 
@@ -10,8 +10,8 @@
 
 - **50 bundled Java capes**, grouped by Account, Staff, Physical Events, Virtual Events, Personal, Competition, and Volunteer
   **内置 50 件 Java 版披风**，按账号相关、员工、线下活动、线上活动、个人、竞赛、志愿者分类
-- **20 Minecraft Dungeons capes** and **2 Minecraft Dungeons II capes**
-  **20 件地下城披风**和 **2 件地下城 2 披风**
+- **20 Minecraft Dungeons capes** and **7 Minecraft Dungeons II capes**
+  **20 件地下城披风**和 **7 件地下城 2 披风**
 - **Dropdown filter** next to the title: Minecraft / Minecraft Dungeons / Minecraft Dungeons II
   标题旁的**下拉筛选**：我的世界 / 我的世界地下城 / 我的世界地下城2
 - One scrolling page in Wiki order; the mouse wheel jumps between categories
@@ -20,6 +20,8 @@
   **悬停**查看披风名称和来历
 - **Night glow**: capes and elytra glow at night or in dark places (toggleable)
   **夜晚发光**：夜晚或昏暗处披风和鞘翅会发光（可开关）
+- Capes without an elytra design keep the **vanilla elytra texture**
+  没有鞘翅图案的披风保留**原版鞘翅材质**
 - **Upload custom PNG capes** in-game (saved to `config/localcapes/`), delete them with the × button
   游戏内**上传自定义 PNG 披风**（保存到 `config/localcapes/`），点 × 删除
 - Open the picker from the inventory **Cape** button, press **H**, or run `/localcapes`
@@ -29,4 +31,5 @@
 
 ## Requirements / 前置要求
 
-- [Architectury API](https://modrinth.com/mod/architectury-api) ≥ 9.2.14
+- **1.21.1**: [Architectury API](https://modrinth.com/mod/architectury-api) ≥ 13.0.11; Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api), NeoForge needs NeoForge ≥ 21.1
+- **1.20.1**: [Architectury API](https://modrinth.com/mod/architectury-api) ≥ 9.2.14; Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api), Forge needs Forge ≥ 47.3.0
