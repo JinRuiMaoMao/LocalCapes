@@ -1,0 +1,13 @@
+## 1.6.0
+
+### New / 新增
+- **Minecraft 1.21.1 support** (Fabric & NeoForge). 1.20.1 (Fabric & Forge) is still supported
+  **支持 Minecraft 1.21.1**（Fabric & NeoForge），1.20.1（Fabric & Forge）继续支持
+- **5 Minecraft Dungeons II capes**: Soul Cape (Deluxe Edition), Corrupted Creeper Cape (gamescom / Twitch / TikTok promotion), Special Cape, Mojang Cape, and the unused Slice Slayer Cape. Dungeons II capes: 2 → 7
+  新增 **5 件《我的世界：地下城 2》披风**：灵魂披风（豪华版）、腐化苦力怕披风（科隆游戏展 / Twitch / TikTok 活动）、特别披风、Mojang 披风，以及未使用的切片杀手披风。地下城 2 披风 2 → 7
+
+### Changed / 改动
+- Capes without an elytra design now show the **vanilla elytra texture** instead of an invisible elytra (affects the new Dungeons II capes, the Microsoft Xbox 360 Cape, the 4J Studios Cape, and custom PNGs with an empty elytra area)
+  没有鞘翅图案的披风现在显示**原版鞘翅材质**，不再是隐形鞘翅（影响新增的地下城 2 披风、Microsoft Xbox 360 披风、4J Studios 披风，以及鞘翅区域为空的自定义 PNG）
+- Night glow skips the vanilla elytra
+  夜晚发光不再作用于原版鞘翅

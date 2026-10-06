@@ -1,0 +1,15 @@
+1.6.0
+
+【新增】
+・支持 Minecraft 1.21.1（Fabric & NeoForge），1.20.1（Fabric & Forge）继续支持
+・新增 5 件《我的世界：地下城 2》披风：灵魂披风（豪华版）、腐化苦力怕披风（科隆游戏展 / Twitch / TikTok 活动）、特别披风、Mojang 披风，以及未使用的切片杀手披风。地下城 2 披风 2 → 7
+
+【改动】
+・没有鞘翅图案的披风现在显示原版鞘翅材质，不再是隐形鞘翅（影响新增的地下城 2 披风、Microsoft Xbox 360 披风、4J Studios 披风，以及鞘翅区域为空的自定义 PNG）
+・夜晚发光不再作用于原版鞘翅
+
+【前置】
+・1.21.1 Fabric：Fabric Loader ≥ 0.16.14、Fabric API、Architectury API ≥ 13.0.11
+・1.21.1 NeoForge：NeoForge ≥ 21.1、Architectury API ≥ 13.0.11
+・1.20.1 Fabric：Fabric Loader ≥ 0.16.14、Fabric API、Architectury API ≥ 9.2.14
+・1.20.1 Forge：Forge ≥ 47.3.0、Architectury API ≥ 9.2.14
