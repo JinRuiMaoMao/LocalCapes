@@ -1,0 +1,1 @@
+Client-side mod for Minecraft 1.20.1 (Fabric & Forge) and 1.21.1 (Fabric & NeoForge): wear 50 bundled Java capes, 27 Minecraft Dungeons / Dungeons II capes, or your own PNGs — with optional night glow.
