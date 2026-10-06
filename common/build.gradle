@@ -2,10 +2,6 @@ architectury {
     common(enabled_platforms.split(","))
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/localcapes.accesswidener")
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()

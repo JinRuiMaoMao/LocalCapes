@@ -1,36 +1,32 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "com.gradleup.shadow"
 }
 
 architectury {
     platformSetupLoomIde()
-    forge()
-}
-
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-        mixinConfig "localcapes.mixins.json"
-    }
+    neoForge()
 }
 
 configurations {
-    common
-    shadowCommon
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    shadowCommon {
+        canBeResolved = true
+        canBeConsumed = false
+    }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    modApi "dev.architectury:architectury-forge:${architectury_version}"
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive = false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
 processResources {
@@ -41,12 +37,11 @@ processResources {
             "mod_author"          : mod_author,
             "mod_description"     : mod_description,
             "mod_license"         : mod_license,
-            "forge_version"       : forge_version.split("\\.")[0],
             "minecraft_version"   : minecraft_version,
             "architectury_version": architectury_version
     ]
     inputs.properties(properties)
-    filesMatching("META-INF/mods.toml") {
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand properties
     }
 }
@@ -59,7 +54,7 @@ shadowJar {
 }
 
 remapJar {
-    input.set shadowJar.archiveFile
+    inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier = null
 }

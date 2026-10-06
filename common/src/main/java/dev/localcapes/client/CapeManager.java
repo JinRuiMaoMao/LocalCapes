@@ -105,7 +105,12 @@ public final class CapeManager {
             "mystery",
             "red_royal",
             "twisted",
-            "hero_mcd2"
+            "hero_mcd2",
+            "soul",
+            "corrupted_creeper",
+            "special",
+            "mojang_mcd2",
+            "slice_slayer"
     );
 
     private static final Pattern UUID_DASHED = Pattern.compile(
@@ -113,10 +118,12 @@ public final class CapeManager {
     );
     private static final Pattern UUID_FLAT = Pattern.compile("^[0-9a-fA-F]{32}$");
     private static final String NONE = "none";
+    public static final ResourceLocation VANILLA_ELYTRA = ResourceLocation.withDefaultNamespace("textures/entity/elytra.png");
 
     private static final Map<String, ResourceLocation> BY_NAME = new HashMap<>();
     private static final Map<UUID, ResourceLocation> BY_UUID = new HashMap<>();
     private static final Set<ResourceLocation> DYNAMIC = new HashSet<>();
+    private static final Set<ResourceLocation> NO_ELYTRA = new HashSet<>();
     private static final List<CapeEntry> BUNDLED = new ArrayList<>();
     private static final List<CapeEntry> LOCAL_FILES = new ArrayList<>();
     @Nullable
@@ -154,6 +161,7 @@ public final class CapeManager {
             textures.release(id);
         }
         DYNAMIC.clear();
+        NO_ELYTRA.clear();
         BY_NAME.clear();
         BY_UUID.clear();
         defaultCape = null;
@@ -187,7 +195,15 @@ public final class CapeManager {
                 "textures/cape",
                 location -> location.getNamespace().equals(LocalCapes.MOD_ID) && location.getPath().endsWith(".png")
         );
-        for (ResourceLocation location : found.keySet()) {
+        for (Map.Entry<ResourceLocation, Resource> resource : found.entrySet()) {
+            ResourceLocation location = resource.getKey();
+            try (InputStream in = resource.getValue().open(); NativeImage image = NativeImage.read(in)) {
+                if (!hasElytraPixels(image)) {
+                    NO_ELYTRA.add(location);
+                }
+            } catch (IOException e) {
+                LocalCapes.LOGGER.warn("Could not inspect bundled cape {}", location, e);
+            }
             String path = location.getPath();
             String relative = path.substring("textures/cape/".length(), path.length() - 4);
             int slash = relative.indexOf('/');
@@ -239,7 +255,10 @@ public final class CapeManager {
                 );
             }
 
-            ResourceLocation id = new ResourceLocation(LocalCapes.MOD_ID, "dynamic/" + sanitize(stem));
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(LocalCapes.MOD_ID, "dynamic/" + sanitize(stem));
+            if (!hasElytraPixels(image)) {
+                NO_ELYTRA.add(id);
+            }
             textures.register(id, new DynamicTexture(image));
             DYNAMIC.add(id);
             indexCape(stem, id);
@@ -249,6 +268,25 @@ public final class CapeManager {
             LocalCapes.LOGGER.error("Could not load cape {}", file, e);
             return false;
         }
+    }
+
+    /** The elytra occupies (22,0)-(46,22) of a 64-wide cape texture; HD textures scale with width. */
+    private static boolean hasElytraPixels(NativeImage image) {
+        int scale = Math.max(1, image.getWidth() / 64);
+        int maxX = Math.min(image.getWidth(), 46 * scale);
+        int maxY = Math.min(image.getHeight(), 22 * scale);
+        for (int y = 0; y < maxY; y++) {
+            for (int x = 22 * scale; x < maxX; x++) {
+                if ((image.getPixelRGBA(x, y) >>> 24) != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static ResourceLocation elytraTexture(ResourceLocation cape) {
+        return NO_ELYTRA.contains(cape) ? VANILLA_ELYTRA : cape;
     }
 
     private static void indexCape(String stem, ResourceLocation id) {

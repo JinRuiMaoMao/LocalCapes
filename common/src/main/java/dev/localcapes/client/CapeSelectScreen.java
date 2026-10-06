@@ -302,11 +302,18 @@ public final class CapeSelectScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
         int left = this.width / 2 - PANEL_W / 2;
         int top = this.height / 2 - PANEL_H / 2;
         graphics.fill(left, top, left + PANEL_W, top + PANEL_H, 0xC0101010);
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+        int left = this.width / 2 - PANEL_W / 2;
+        int top = this.height / 2 - PANEL_H / 2;
         this.renderTitle(graphics, mouseX, mouseY);
 
         int gridTop = top + GRID_OFFSET;
@@ -379,7 +386,6 @@ public final class CapeSelectScreen extends Screen {
             );
         }
 
-        super.render(graphics, mouseX, mouseY, partialTick);
         if (this.filterOpen) {
             this.renderFilterMenu(graphics, mouseX, mouseY);
             return;
@@ -445,7 +451,7 @@ public final class CapeSelectScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double delta) {
         if (this.filterOpen) {
             return true;
         }

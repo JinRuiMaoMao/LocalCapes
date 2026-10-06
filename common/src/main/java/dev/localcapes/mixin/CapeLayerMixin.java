@@ -27,7 +27,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AbstractClientPlayer, P
     }
 
     @Redirect(
-            method = "render",
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/AbstractClientPlayer;isModelPartShown(Lnet/minecraft/world/entity/player/PlayerModelPart;)Z"
@@ -39,7 +39,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AbstractClientPlayer, P
     }
 
     @Inject(
-            method = "render",
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/model/PlayerModel;renderCloak(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V",
@@ -62,7 +62,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AbstractClientPlayer, P
         if (!CapeGlow.active(player)) {
             return;
         }
-        ResourceLocation texture = player.getCloakTextureLocation();
+        ResourceLocation texture = player.getSkin().capeTexture();
         if (texture == null) {
             return;
         }

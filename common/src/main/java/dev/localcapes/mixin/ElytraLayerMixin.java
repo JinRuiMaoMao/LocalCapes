@@ -10,15 +10,14 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ElytraLayer.class)
@@ -27,23 +26,11 @@ public abstract class ElytraLayerMixin {
     @Final
     private ElytraModel<LivingEntity> elytraModel;
 
-    @Redirect(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/player/AbstractClientPlayer;isModelPartShown(Lnet/minecraft/world/entity/player/PlayerModelPart;)Z"
-            )
-    )
-    private boolean localcapes$alwaysShowLocalElytra(AbstractClientPlayer player, PlayerModelPart part) {
-        return player.isModelPartShown(part)
-                || (part == PlayerModelPart.CAPE && CapeManager.hasCape(player));
-    }
-
     @Inject(
-            method = "render",
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/model/ElytraModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V",
+                    target = "Lnet/minecraft/client/model/ElytraModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V",
                     shift = At.Shift.AFTER
             )
     )
@@ -63,23 +50,12 @@ public abstract class ElytraLayerMixin {
         if (!(entity instanceof AbstractClientPlayer player) || !CapeGlow.active(player)) {
             return;
         }
-        ResourceLocation texture = player.getElytraTextureLocation();
-        if (texture == null) {
-            texture = player.getCloakTextureLocation();
-        }
-        if (texture == null) {
+        PlayerSkin skin = player.getSkin();
+        ResourceLocation texture = skin.elytraTexture() != null ? skin.elytraTexture() : skin.capeTexture();
+        if (texture == null || texture.equals(CapeManager.VANILLA_ELYTRA)) {
             return;
         }
         VertexConsumer consumer = buffer.getBuffer(CapeGlow.overlay(texture));
-        this.elytraModel.renderToBuffer(
-                poseStack,
-                consumer,
-                LightTexture.FULL_BRIGHT,
-                OverlayTexture.NO_OVERLAY,
-                1.0F,
-                1.0F,
-                1.0F,
-                1.0F
-        );
+        this.elytraModel.renderToBuffer(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
     }
 }
